@@ -58,7 +58,7 @@ export default {
   PLACEHOLDER_OFFER_TITLE: 'Wpisz tytuł ogłosznia...',
   PLACEHOLDER_OFFER_DESCRIBTION: 'Wpisz swoje ogłoszenie...',
   LABEL_DATE: 'Data',
-  LABEL_POINT_LOCALISATION: 'Wskaż lokalizację:',
+  LABEL_LOCATION_POINT: 'Wskaż lokalizację:',
   LABEL_LENGTH_OF_STAY: 'Czas pobytu',
   LABEL_HOST_LANG: 'Język, w jakim mówi gospodarz:',
 };
