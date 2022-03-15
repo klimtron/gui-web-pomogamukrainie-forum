@@ -9,8 +9,10 @@ import { CategoryRoutingName } from '@app/shared/models';
   styleUrls: ['./search-result.component.scss'],
 })
 export class SearchResultComponent implements OnChanges {
+  constructor(private router: Router) {}
+
   @Input()
-  offerId!: number;
+  offerId: number = 0;
   @Input()
   category?: CategoryRoutingName;
   @Input()
@@ -23,18 +25,14 @@ export class SearchResultComponent implements OnChanges {
   description!: string;
   @Input()
   posted?: Date | string | undefined;
+
   postedDate: Date | undefined;
-  CategoryRoutingName = CategoryRoutingName;
 
-  constructor(private router: Router) {}
-
-  onViewOffer() {
-    // this.router.navigate([CategoryRoutingName.FIND_HELP, this.category, this.offerId]);
-    this.router.navigate(['znajdz-pomoc', 'view-offer-accommodation', this.offerId]);
+  onViewOffer(offerId: number) {
+    this.router.navigate(['znajdz-pomoc', 'view-offer', offerId]);
   }
 
   ngOnChanges({ posted }: SimpleChanges) {
-    console.log(CategoryRoutingName.FIND_HELP, this.category, this.offerId);
     const postedVal = posted.currentValue;
     if (postedVal === undefined || postedVal instanceof Date) {
       this.postedDate = postedVal;
