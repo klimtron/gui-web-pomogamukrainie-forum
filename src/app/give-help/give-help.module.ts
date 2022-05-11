@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { CategoryNavigationComponentModule } from '@app/shared/components';
 import { OfferDataInitService } from '@app/shared/services';
+import { IsEditService } from '@app/shared/services/';
 import { SharedModule } from '@app/shared/shared.module';
 import { TranslateModule } from '@ngx-translate/core';
 import { AccommodationFormComponentModule } from './accommodation-form/accommodation-form.module';
@@ -20,6 +21,6 @@ import { GiveHelpComponent } from './give-help.component';
     TranslateModule,
     SharedModule,
   ],
-  providers: [OfferDataInitService],
+  providers: [OfferDataInitService, IsEditService],
 })
 export class GiveHelpModule {}

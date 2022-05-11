@@ -11,6 +11,8 @@ import { ConfirmCancelDialogComponent } from '@app/shared/components';
 import { DIALOG_CANCEL_OFFER_CONFIG } from '@app/shared/consts';
 import { PhoneNumber } from '@app/shared/models';
 import { OfferDataInitService } from '@app/shared/services';
+import { IsEditService } from '@app/shared/services';
+
 @Component({
   selector: 'app-accommodation-form',
   templateUrl: './accommodation-form.component.html',
@@ -29,17 +31,18 @@ export class AccommodationFormComponent implements OnInit {
 
   constructor(
     private accommodationsResourceService: AccommodationsResourceService,
-    private router: Router,
+    public router: Router,
     private dialog: MatDialog,
     private snackbarService: SnackbarService,
     private route: ActivatedRoute,
-    private offerDataInitService: OfferDataInitService
+    private offerDataInitService: OfferDataInitService,
+    public isEditService: IsEditService
   ) {}
 
   ngOnInit(): void {
     this.offerId = Number(this.route.snapshot.paramMap.get('id'));
 
-    if (this.isEditRoute) {
+    if (this.isEditService.isEditRoute(this.router.url, '/edycja-ogloszenia/noclegi/', this.offerId)) {
       this.offerDataInitService.initOfferDataForEdit(this, CategoryNameKey.ACCOMMODATION);
       DIALOG_CANCEL_OFFER_CONFIG.data.headerText = CANCEL_DIALOG_HEADERS.CONFIRM_CANCEL_OFFER_EDIT;
     } else {
@@ -49,7 +52,7 @@ export class AccommodationFormComponent implements OnInit {
 
   submitOffer(): void {
     this.offerDataInitService.preparePhoneNumber(this);
-    if (!this.isEditRoute) {
+    if (this.isEditService.isEditRoute(this.router.url, '/edycja-ogloszenia/noclegi/', this.offerId)) {
       this.accommodationsResourceService
         .createAccommodations(this.data)
         .pipe(take(1))
@@ -63,7 +66,7 @@ export class AccommodationFormComponent implements OnInit {
   }
 
   redirectOnSuccess() {
-    if (!this.isEditRoute) {
+    if (!this.isEditService.isEditRoute(this.router.url, '/edycja-ogloszenia/noclegi/', this.offerId)) {
       this.router.navigate([CorePath.MyAccount]).then((navigated: boolean) => {
         if (navigated) {
           this.snackbarService.openUpperSnackAlert(ALERT_TYPES.OFFER_SUCCESS);
@@ -92,7 +95,7 @@ export class AccommodationFormComponent implements OnInit {
     });
   }
 
-  get isEditRoute(): boolean {
-    return this.router.url === `/edycja-ogloszenia/noclegi/${this.offerId}`;
-  }
+  // get isEditRoute(): boolean {
+  //   return this.router.url === `/edycja-ogloszenia/noclegi/${this.offerId}`;
+  // }
 }
