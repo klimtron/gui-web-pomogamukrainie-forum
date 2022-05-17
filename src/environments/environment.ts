@@ -2,23 +2,23 @@
 // `ng build` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
-import { EnvironmentConfig, EnvironmentType } from './model';
+// import { EnvironmentConfig, EnvironmentType } from './model';
 
-export const environment: EnvironmentConfig = {
-  production: false,
-  environmentType: EnvironmentType.OFFAUTH,
-  authConfig: {
-    // issuer docker: https://github.com/coi-gov-pl/pomocua-ogloszenia
-    issuer: 'https://local.pomagamukrainie.gov.pl/auth/realms/POMOCUA',
-    showDebugInformation: true,
-    redirectUri: window.location.origin,
-    logoutUrl: window.location.origin,
-  },
-  applicationInsightsConnectionString: '%BACKEND_REPLACED_APPLICATION_INSIGHTS_CONNECTION_STRING%',
-  recaptcha: {
-    siteKey: '', // @TODO key dev?
-  },
-};
+// export const environment: EnvironmentConfig = {
+//   production: false,
+//   environmentType: EnvironmentType.OFFAUTH,
+//   authConfig: {
+//     // issuer docker: https://github.com/coi-gov-pl/pomocua-ogloszenia
+//     issuer: 'https://local.pomagamukrainie.gov.pl/auth/realms/POMOCUA',
+//     showDebugInformation: true,
+//     redirectUri: window.location.origin,
+//     logoutUrl: window.location.origin,
+//   },
+//   applicationInsightsConnectionString: '%BACKEND_REPLACED_APPLICATION_INSIGHTS_CONNECTION_STRING%',
+//   recaptcha: {
+//     siteKey: '', // @TODO key dev?
+//   },
+// };
 
 /*
  * For easier debugging in development mode, you can import the following file
@@ -28,3 +28,21 @@ export const environment: EnvironmentConfig = {
  * on performance if an error is thrown.
  */
 // import 'zone.js/plugins/zone-error';  // Included with Angular CLI.
+
+//temp stage for token expiry dubug
+
+import { EnvironmentConfig, EnvironmentType } from './model';
+export const environment: EnvironmentConfig = {
+  production: true,
+  environmentType: EnvironmentType.STAGE,
+  authConfig: {
+    issuer: `https://stage.pomagamukrainie.gov.pl/auth/realms/OGLOSZENIA`,
+    showDebugInformation: true,
+    redirectUri: `${window.location.origin}/ogloszenia/`,
+    logoutUrl: `${window.location.origin}/ogloszenia/`,
+  },
+  applicationInsightsConnectionString: '%BACKEND_REPLACED_APPLICATION_INSIGHTS_CONNECTION_STRING%',
+  recaptcha: {
+    siteKey: '6LdZ0QwfAAAAAMYzXcb_DMnDX5uTpaXdMf4Ms_YW',
+  },
+};

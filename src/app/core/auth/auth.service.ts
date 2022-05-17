@@ -1,4 +1,7 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { ALERT_TYPES, CorePath } from '@app/shared/models';
+import { SnackbarService } from '@app/shared/services';
 import { AuthConfig, OAuthErrorEvent, OAuthService } from 'angular-oauth2-oidc';
 import { filter } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -6,7 +9,11 @@ import { AuthSessionStorageKeys } from './model';
 
 @Injectable()
 export class AuthService {
-  constructor(protected readonly oAuthService: OAuthService) {}
+  constructor(
+    protected readonly oAuthService: OAuthService,
+    private router: Router,
+    private snackbarService: SnackbarService
+  ) {}
 
   public initAuth(): Promise<boolean> {
     this.oAuthService.configure(this.createAuthConfig());
@@ -42,9 +49,28 @@ export class AuthService {
   public automaticSilentRefresh(): Promise<boolean> {
     if (this.isLoggedIn()) {
       this.oAuthService.events.pipe(filter((res) => res instanceof OAuthErrorEvent)).subscribe((error) => {
+        console.log('oAuthService.events error', error);
         if (error.type === 'token_refresh_error') {
           this.logOut();
         }
+        if (error.type === 'token_expires') {
+          this.logOut();
+          this.router.navigate([CorePath.MyAccount]).then((navigated: boolean) => {
+            if (navigated) {
+              this.snackbarService.openUpperSnackAlert(ALERT_TYPES.OFFER_SUCCESS);
+            }
+          });
+        }
+      });
+
+      this.oAuthService.events.pipe(filter((e) => e.type == 'token_expires')).subscribe((e) => {
+        console.log('token_expires', e);
+        this.logOut();
+        this.router.navigate([CorePath.MyAccount]).then((navigated: boolean) => {
+          if (navigated) {
+            this.snackbarService.openUpperSnackAlert(ALERT_TYPES.OFFER_SUCCESS);
+          }
+        });
       });
       this.oAuthService.setupAutomaticSilentRefresh();
     }
